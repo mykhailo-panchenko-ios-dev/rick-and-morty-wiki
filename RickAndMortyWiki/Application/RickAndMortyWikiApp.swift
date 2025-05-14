@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+typealias AppStore = Store<AppState, RootReducer>
+
 @main
 struct RickAndMortyWikiApp: App {
     var sharedModelContainer: ModelContainer = {
