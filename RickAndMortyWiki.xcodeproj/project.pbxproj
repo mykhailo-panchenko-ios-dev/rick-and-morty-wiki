@@ -29,47 +29,20 @@
 		D23657EA2DCD01C400E89B60 /* RickAndMortyWikiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RickAndMortyWikiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D256E1632DCD135500A88948 /* Exceptions for "Tests" folder in "RickAndMortyWiki" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				RickAndMortyWikiTests/RickAndMortyWikiTests.swift,
-				RickAndMortyWikiUITests/RickAndMortyWikiUITests.swift,
-				RickAndMortyWikiUITests/RickAndMortyWikiUITestsLaunchTests.swift,
-			);
-			target = D23657D02DCD01C300E89B60 /* RickAndMortyWiki */;
-		};
-		D256E1642DCD135500A88948 /* Exceptions for "Tests" folder in "RickAndMortyWikiTests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				RickAndMortyWikiTests/RickAndMortyWikiTests.swift,
-			);
-			target = D23657DF2DCD01C400E89B60 /* RickAndMortyWikiTests */;
-		};
-		D256E1652DCD135500A88948 /* Exceptions for "Tests" folder in "RickAndMortyWikiUITests" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				RickAndMortyWikiUITests/RickAndMortyWikiUITests.swift,
-				RickAndMortyWikiUITests/RickAndMortyWikiUITestsLaunchTests.swift,
-			);
-			target = D23657E92DCD01C400E89B60 /* RickAndMortyWikiUITests */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D23657D32DCD01C300E89B60 /* RickAndMortyWiki */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RickAndMortyWiki;
 			sourceTree = "<group>";
 		};
-		D256E15A2DCD135500A88948 /* Tests */ = {
+		D23657E32DCD01C400E89B60 /* RickAndMortyWikiTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				D256E1632DCD135500A88948 /* Exceptions for "Tests" folder in "RickAndMortyWiki" target */,
-				D256E1642DCD135500A88948 /* Exceptions for "Tests" folder in "RickAndMortyWikiTests" target */,
-				D256E1652DCD135500A88948 /* Exceptions for "Tests" folder in "RickAndMortyWikiUITests" target */,
-			);
-			path = Tests;
+			path = RickAndMortyWikiTests;
+			sourceTree = "<group>";
+		};
+		D23657ED2DCD01C400E89B60 /* RickAndMortyWikiUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RickAndMortyWikiUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -103,7 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				D23657D32DCD01C300E89B60 /* RickAndMortyWiki */,
-				D256E15A2DCD135500A88948 /* Tests */,
+				D23657E32DCD01C400E89B60 /* RickAndMortyWikiTests */,
+				D23657ED2DCD01C400E89B60 /* RickAndMortyWikiUITests */,
 				D23657D22DCD01C300E89B60 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,7 +109,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				D23657D32DCD01C300E89B60 /* RickAndMortyWiki */,
-				D256E15A2DCD135500A88948 /* Tests */,
 			);
 			name = RickAndMortyWiki;
 			packageProductDependencies = (
@@ -157,6 +130,9 @@
 			dependencies = (
 				D23657E22DCD01C400E89B60 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				D23657E32DCD01C400E89B60 /* RickAndMortyWikiTests */,
+			);
 			name = RickAndMortyWikiTests;
 			packageProductDependencies = (
 			);
@@ -176,6 +152,9 @@
 			);
 			dependencies = (
 				D23657EC2DCD01C400E89B60 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D23657ED2DCD01C400E89B60 /* RickAndMortyWikiUITests */,
 			);
 			name = RickAndMortyWikiUITests;
 			packageProductDependencies = (
