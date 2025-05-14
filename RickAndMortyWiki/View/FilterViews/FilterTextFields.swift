@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct FilterTextFields: View {
+        
     private enum AnimationPhase: CaseIterable {
         case initial
         case rotate
@@ -55,12 +56,12 @@ struct FilterTextFields: View {
         
         var rotationDegree: CGFloat {
             switch self {
-            case .initial, .rotate:
-                return 45
-            case .animating:
-                return 0
-            case .final:
-                return 0
+            case .initial:
+                45
+            case .rotate:
+                30
+            case .animating, .final:
+                0
             }
         }
         
@@ -77,6 +78,8 @@ struct FilterTextFields: View {
     }
     
     @State var animationStart: Bool = false
+    private(set) var title: String
+    
     
     var body: some View {
         
@@ -120,7 +123,7 @@ struct FilterTextFields: View {
             case .animating:
                     .spring(duration: 1, bounce: 0.7)
             case .final:
-                    .snappy(duration: 1, extraBounce: 0.45)
+                    .snappy(duration: 1, extraBounce: 0.30)
             }
             
             
@@ -140,11 +143,14 @@ struct FilterTextFields: View {
                 .frame(width: 200, height: 100)
                 .rotationEffect(.degrees(-45))
                 .shadow(radius: 10, x: 10)
-            Text("Gender")
+            Text(title)
                 .rotationEffect(.degrees(-45))
-                .offset(x: -35, y: 35)
+                .offset(x: -30, y: 30)
                 .foregroundColor(.text)
                 .bold()
+                .shadow(color: .backgroundTextField,
+                        radius: 2,
+                        x: 3)
 
         }
     }
@@ -153,6 +159,5 @@ struct FilterTextFields: View {
 
 
 #Preview {
-    @Previewable @State var animationStart: Bool = false
-    FilterTextFields(animationStart: animationStart)
+    FilterTextFields(title: "Gender")
 }

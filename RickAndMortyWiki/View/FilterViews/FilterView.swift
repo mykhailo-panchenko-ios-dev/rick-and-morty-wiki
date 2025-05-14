@@ -13,34 +13,34 @@ struct FilterView: View {
     
     var body: some View {
         ZStack {
+            
             Color.background.edgesIgnoringSafeArea(.all)
-            contentView
-            backgroundDetailsView
+            ScrollView(.vertical) {
+                contentView
+            }
+            submitButton.frame(alignment: .bottom)
         }
     }
     
     private var backgroundDetailsView: some View {
-        HStack{
-            ZStack {
-                FilterTextFields()
-                    .offset(y: -135)
-                    .transition(.slide)
-                FilterTextFields()
-                    .transition(.slide)
-                FilterTextFields()
-                    .offset(y: 135)
+        HStack {
+            VStack(spacing: 40) {
+                FilterTextFields(title: "Name")
+                FilterTextFields(title: "Gender")
+                FilterTextFields(title: "Species")
+                FilterTextFields(title: "Age")
+                FilterTextFields(title: "Status")
+                Spacer()
             }
-            .padding(.leading, -60)
-            Spacer()
         }
-       
     }
     
     private var contentView: some View {
-        VStack {
+        VStack(spacing: 40) {
             titleAndSubtitleView
-            Spacer()
-            submitButton
+            backgroundDetailsView.frame(width: 500).offset(x: -110, y: 0)
+            
+            
         }
     }
     
@@ -50,7 +50,7 @@ struct FilterView: View {
                 .bold()
                 .font(.largeTitle)
                 .foregroundColor(.text)
-            Text("Select filters here")
+            Text("Select parameters to filter characters")
                 .font(.callout)
                 .foregroundColor(.text)
         }.padding(.horizontal, 20)
@@ -58,13 +58,13 @@ struct FilterView: View {
     }
     
     private var submitButton: some View {
-        ZStack {
+        VStack{
+            Spacer()
             Button("Show list of characters") {
                 
-            }.growingButtonStyle()
-            
+            }
+            .growingButtonStyle().shadow(color:.buttonBackground, radius: 5).padding(.bottom, 20)
         }
-        
     }
 }
 
