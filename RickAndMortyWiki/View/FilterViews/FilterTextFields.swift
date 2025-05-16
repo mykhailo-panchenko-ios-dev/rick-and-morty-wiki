@@ -77,13 +77,11 @@ struct FilterTextFields: View {
         }
     }
     
-    @State var animationStart: Bool = false
-    private(set) var title: String
-    
+    @State private var animationStart: Bool = false
+    let title: String
+    let placeholder: String
     
     var body: some View {
-        
-        
         StoppingPhaseAnimator(AnimationPhase.allCases,
                               trigger: animationStart) { phase in
             ZStack {
@@ -101,7 +99,7 @@ struct FilterTextFields: View {
                     .offset(x: phase.xOffsetTextField,
                             y: phase.yOffsetTextField)
                     
-                TextField("", text: .constant(""))
+                TextField(phase == .final ? placeholder :"", text: .constant(""))
                     .frame(width: phase.textFieldWidth - 16,
                            height: 44,
                            alignment: .center)
@@ -118,16 +116,13 @@ struct FilterTextFields: View {
         } animation: { phase in
             switch phase {
             case .initial, .rotate:
-                    .smooth(duration: 1, extraBounce: 0.4)
+                    .smooth(extraBounce: 0.4)
                 
             case .animating:
-                    .spring(duration: 1, bounce: 0.7)
+                    .spring(bounce: 0.7)
             case .final:
-                    .snappy(duration: 1, extraBounce: 0.30)
+                    .snappy(extraBounce: 0.30)
             }
-            
-            
-            
         }.onAppear {
             animationStart = true
         }
@@ -135,9 +130,8 @@ struct FilterTextFields: View {
     
     private var animatedTextViews: some View {
         ZStack {
-            
             Rectangle()
-                .fill(Color.detail)
+                .fill(Color.detail.gradient)
                 .cornerRadius(20)
                 .padding()
                 .frame(width: 200, height: 100)
@@ -159,5 +153,5 @@ struct FilterTextFields: View {
 
 
 #Preview {
-    FilterTextFields(title: "Gender")
+    FilterTextFields(title: "Gender", placeholder: "Male")
 }

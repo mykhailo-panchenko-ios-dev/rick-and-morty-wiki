@@ -13,7 +13,6 @@ struct FilterView: View {
     
     var body: some View {
         ZStack {
-            
             Color.background.edgesIgnoringSafeArea(.all)
             ScrollView(.vertical) {
                 contentView
@@ -25,11 +24,14 @@ struct FilterView: View {
     private var backgroundDetailsView: some View {
         HStack {
             VStack(spacing: 40) {
-                FilterTextFields(title: "Name")
-                FilterTextFields(title: "Gender")
-                FilterTextFields(title: "Species")
-                FilterTextFields(title: "Age")
-                FilterTextFields(title: "Status")
+                FilterTextFields(title: "Name",
+                                 placeholder: "Rick Sanchez")
+                FilterTextFields(title: "Gender",
+                                 placeholder: "Male")
+                FilterTextFields(title: "Species",
+                                 placeholder: "Human")
+                FilterTextFields(title: "Status",
+                                 placeholder: "Alive")
                 Spacer()
             }
         }
@@ -39,8 +41,6 @@ struct FilterView: View {
         VStack(spacing: 40) {
             titleAndSubtitleView
             backgroundDetailsView.frame(width: 500).offset(x: -110, y: 0)
-            
-            
         }
     }
     
