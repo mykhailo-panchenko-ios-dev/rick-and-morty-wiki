@@ -7,11 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 typealias AppStore = Store<AppState, RootReducer>
 
 @main
 struct RickAndMortyWikiApp: App {
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,

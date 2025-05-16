@@ -7,11 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-
+    let service = IFilterService(networkLayer: INetworkLayer())
+    
     var body: some View {
         NavigationSplitView {
             List {
@@ -40,6 +42,7 @@ struct ContentView: View {
     }
 
     private func addItem() {
+        service.run()
         withAnimation {
             let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
