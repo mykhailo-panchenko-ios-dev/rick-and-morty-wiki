@@ -7,21 +7,16 @@
 import Foundation
 import Combine
 
-protocol NetworkLayer {
-    func fethData<D: Codable> (
-        from: URLs,
+protocol NetworkLayerProtocol {
+    func fetch<D: Codable> (
+        from: RickAndMortyApiURL,
         queryParameters: [URLQueryItem],
         responseType: D.Type) -> AnyPublisher<D, NetworkError>
 }
 
-enum NetworkError: Error {
-    case urlError
-    case invalidResponse
-    case invalidURL
-    case decodeError
-}
 
-enum URLs {
+
+enum RickAndMortyApiURL {
     case filterCharacters
     
     func getPath() -> String {
@@ -33,12 +28,12 @@ enum URLs {
     }
 }
 
-class INetworkLayer: NetworkLayer {
-    func fethData<D: Codable> (
-        from: URLs,
+class NetworkLayer: NetworkLayerProtocol {
+    func fetch<D: Codable> (
+        from: RickAndMortyApiURL,
         queryParameters: [URLQueryItem],
         responseType: D.Type) -> AnyPublisher<D, NetworkError> {
-            var urlComponent = URLComponents(string: URLs.filterCharacters.getPath())
+            var urlComponent = URLComponents(string: from.getPath())
             urlComponent?.queryItems = queryParameters
             guard let url = urlComponent?.url else {
                 return Fail(error: .invalidURL).eraseToAnyPublisher()
@@ -46,14 +41,14 @@ class INetworkLayer: NetworkLayer {
             return Future<D, NetworkError> { promise in
                 URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
                     if let error = error {
-                        print("Responce at \(Date()) with error: \(error)")
+                        NetworkLogger.logError(error)
                         promise(.failure(.urlError))
                     } else if let data = data {
                         do {
                             let decodedData = try JSONDecoder().decode(responseType, from: data)
                             promise(.success(decodedData))
                         } catch let error {
-                            print("Decoding at \(Date()) with error: \(error)")
+                            NetworkLogger.logError(error)
                             promise(.failure(.decodeError))
                         }
                         

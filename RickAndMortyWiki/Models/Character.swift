@@ -21,11 +21,11 @@ struct Character: Codable {
         case unknown
     }
     
-    private var name: String?
-    private var status: Status?
-    private var species: String?
-    private var type: String?
-    private var gender: Gender?
+    var name: String?
+    var status: Status?
+    var species: String?
+    var type: String?
+    var gender: Gender?
 }
 
 

@@ -16,13 +16,16 @@ class Store<AppState, RootReducer>: ReduxStore
     private(set) public var state: AppState
 
     private let rootReducer: RootReducer
+    private var middlewares: [ReduxMiddleware]
 
     init(
         initialState: S,
-        rootReducer: RootReducer
+        rootReducer: RootReducer,
+        middlewares: [ReduxMiddleware]
     ) {
         self.state = initialState
         self.rootReducer = rootReducer
+        self.middlewares = middlewares
     }
 
     public func dispatch(_ action: ReduxAction) {
@@ -30,5 +33,9 @@ class Store<AppState, RootReducer>: ReduxStore
             state: state,
             action: action
         )
+        
+        middlewares.forEach {
+            $0.dispatch(action, effectDispatch: dispatch)
+        }
     }
 }
