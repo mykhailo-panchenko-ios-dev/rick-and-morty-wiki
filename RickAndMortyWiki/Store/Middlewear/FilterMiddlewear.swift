@@ -8,7 +8,7 @@ import Foundation
 import Combine
 
 class FilterMiddleware: ReduxMiddleware {
-    func dispatch(_ action: ReduxAction, effectDispatch: @escaping (ReduxAction) -> Void) {
+    func dispatch(state: ReduxState, action: ReduxAction, effectDispatch: @escaping (ReduxAction) -> Void) {
 //        switch action {
 //        case :
             

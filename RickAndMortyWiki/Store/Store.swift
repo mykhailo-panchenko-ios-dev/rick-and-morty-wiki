@@ -35,7 +35,10 @@ class Store<AppState, RootReducer>: ReduxStore
         )
         
         middlewares.forEach {
-            $0.dispatch(action, effectDispatch: dispatch)
+            $0.dispatch(state: state,
+                        action: action,
+                        effectDispatch: dispatch
+            )
         }
     }
 }
