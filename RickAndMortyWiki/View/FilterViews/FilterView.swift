@@ -9,8 +9,15 @@ import SwiftUI
 
 struct FilterView: View {
     
-//    @EnvironmentObject var store: AppStore
-    
+    @EnvironmentObject var store: AppStore
+    struct FilterData: Equatable {
+        var name: String = ""
+        var gender: String = ""
+        var species: String = ""
+        var status: String = ""
+    }
+    @State private var filterData: FilterData = FilterData()
+  
     var body: some View {
         ZStack {
             Color.background.edgesIgnoringSafeArea(.all)
@@ -25,14 +32,25 @@ struct FilterView: View {
         HStack {
             VStack(spacing: 40) {
                 FilterTextFields(title: "Name",
-                                 placeholder: "Rick Sanchez")
+                                 placeholder: "Rick Sanchez",
+                                 field: $filterData.name)
+                
                 FilterTextFields(title: "Gender",
-                                 placeholder: "Male")
+                                 placeholder: "Male",
+                                 field: $filterData.gender)
+                
                 FilterTextFields(title: "Species",
-                                 placeholder: "Human")
+                                 placeholder: "Human",
+                                 field: $filterData.species)
                 FilterTextFields(title: "Status",
-                                 placeholder: "Alive")
+                                 placeholder: "Alive",
+                                 field: $filterData.status)
                 Spacer()
+            }.onChange(of: filterData) {
+                store.dispatch(AddFilterCharactersDataAction(name: filterData.name,
+                                                             gender: filterData.gender,
+                                                             species: filterData.species,
+                                                             status: filterData.status))
             }
         }
     }
@@ -60,8 +78,8 @@ struct FilterView: View {
     private var submitButton: some View {
         VStack{
             Spacer()
-            Button("Show list of characters") {
-                
+            Button(store.state.filterState.isLoading ? "Loading...": "Show list of characters") {
+                store.dispatch(StartFilterCharacterRequestAction())
             }
             .growingButtonStyle().shadow(color:.buttonBackground, radius: 5).padding(.bottom, 20)
         }

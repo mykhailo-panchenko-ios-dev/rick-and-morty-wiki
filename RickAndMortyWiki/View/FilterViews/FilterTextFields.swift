@@ -80,6 +80,7 @@ struct FilterTextFields: View {
     @State private var animationStart: Bool = false
     let title: String
     let placeholder: String
+    @Binding var field: String
     
     var body: some View {
         StoppingPhaseAnimator(AnimationPhase.allCases,
@@ -99,7 +100,8 @@ struct FilterTextFields: View {
                     .offset(x: phase.xOffsetTextField,
                             y: phase.yOffsetTextField)
                     
-                TextField(phase == .final ? placeholder :"", text: .constant(""))
+                TextField(phase == .final ? placeholder :"",
+                          text: $field)
                     .frame(width: phase.textFieldWidth - 16,
                            height: 44,
                            alignment: .center)
@@ -153,5 +155,8 @@ struct FilterTextFields: View {
 
 
 #Preview {
-    FilterTextFields(title: "Gender", placeholder: "Male")
+    @Previewable @State var text: String = ""
+    FilterTextFields(title: "Gender",
+                     placeholder: "Male",
+                     field: $text)
 }

@@ -76,22 +76,9 @@ class IFilterCharacterService: FilterCharacterService {
     func fetchFilters(filterCharacterRequest: FilterCharacterRequest) -> AnyPublisher<[Character], NetworkError> {
         networkLayer.fetch(from: .filterCharacters,
                            queryParameters: filterCharacterRequest.createQueryParameters(),
-                              responseType: Response.self)
+                           responseType: Response.self)
         .map { $0.results }
         .eraseToAnyPublisher()
     }
-    
-    func run() {
-        fetchFilters(filterCharacterRequest: FilterCharacterRequest(name: "Rick", status: .alive, species: "Human")).sink { response in
-            switch response {
-            case .failure(let error):
-                print(error)
-            case .finished:
-                print("Finished")
-            }
-        } receiveValue: { characters in
-            print(characters)
-        }.store(in: &cancellables)
-
-    }
 }
+

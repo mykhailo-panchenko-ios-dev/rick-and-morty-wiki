@@ -7,7 +7,13 @@
 
 import Foundation
 
-class ServiceBuilder {
+class ServiceFactory {
+    var networkLayer: NetworkLayer
+    
+    init(networkLayer: NetworkLayer) {
+        self.networkLayer = networkLayer
+    }
+    
     func makeFilterService() -> FilterCharacterService {
         let filterCharacterService = IFilterCharacterService(networkLayer: NetworkLayer())
         return filterCharacterService
