@@ -78,20 +78,33 @@ struct FilterTextFields: View {
     }
     
     @State private var animationStart: Bool = false
+    @State private var pickerSelected: Bool = false
+
     let title: String
     let placeholder: String
+    let pickerItems: [String]
+
     @Binding var field: String
+    
+    init(title: String,
+         placeholder: String,
+         field: Binding<String>,
+         pickerItems: [String] = []) {
+        self.title = title
+        self.placeholder = placeholder
+        self._field = field
+        self.pickerItems = pickerItems
+    }
     
     var body: some View {
         StoppingPhaseAnimator(AnimationPhase.allCases,
                               trigger: animationStart) { phase in
             ZStack {
-               
-                animatedTextViews.offset(x: phase.xOffset,
-                                     y: phase.yOffset)
+                
+                animatedTitleViews.offset(x: phase.xOffset,
+                                         y: phase.yOffset)
                 
                 Rectangle()
-                    
                     .fill(Color.backgroundTextField)
                     .frame(width: phase.textFieldWidth,
                            height: 44)
@@ -99,22 +112,19 @@ struct FilterTextFields: View {
                     .shadow(radius: 3)
                     .offset(x: phase.xOffsetTextField,
                             y: phase.yOffsetTextField)
-                    
-                TextField(phase == .final ? placeholder :"",
-                          text: $field)
+                textFieldView(phase: phase)
                     .frame(width: phase.textFieldWidth - 16,
-                           height: 44,
-                           alignment: .center)
-                    
-                    .offset(x: phase.xOffsetTextField,
-                             y: phase.yOffsetTextField)
-                    
-                    .padding(.vertical, 20)
-               
-                                       
+                        height: 44,
+                        alignment: .leading)
+                .offset(x: phase.xOffsetTextField,
+                        y: phase.yOffsetTextField)
+                .padding(.vertical, 20)
+            }.rotationEffect(.degrees(phase.rotationDegree))
+            .onTapGesture {
+                withAnimation(.easeIn(duration: 0.2)) {
+                    pickerSelected.toggle()
+                }
             }
-            .rotationEffect(.degrees(phase.rotationDegree))
-            
         } animation: { phase in
             switch phase {
             case .initial, .rotate:
@@ -130,7 +140,33 @@ struct FilterTextFields: View {
         }
     }
     
-    private var animatedTextViews: some View {
+    @ViewBuilder
+    private func textFieldView(phase: AnimationPhase) -> some View {
+        if !pickerItems.isEmpty {
+            if pickerSelected {
+                Picker("", selection: $field) {
+                    ForEach(pickerItems, id: \.self) { item in
+                        Text(item)
+                    }
+                }.pickerStyle(.segmented)
+                    .onChange(of: field) {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            pickerSelected.toggle()
+                        }
+                    }
+            } else {
+                if field.isEmpty {
+                    Text(phase == .final ? placeholder :"").foregroundStyle(PlaceholderTextShapeStyle())
+                }
+                Text(field)
+            }
+        } else {
+            TextField(phase == .final ? placeholder :"",
+                      text: $field)
+        }
+    }
+    
+    private var animatedTitleViews: some View {
         ZStack {
             Rectangle()
                 .fill(Color.detail.gradient)
@@ -147,7 +183,6 @@ struct FilterTextFields: View {
                 .shadow(color: .backgroundTextField,
                         radius: 2,
                         x: 3)
-
         }
     }
 }

@@ -8,9 +8,11 @@ import SwiftUI
 
 struct FilterState: ReduxState {
     var name: String = ""
-    var gender: String = ""
+    var gender: Character.Gender?
     var species: String = ""
-    var status: String = ""
+    var status: Character.Status?
     var isLoading: Bool = false
     var errorMessage: String?
+    let genders = Character.Gender.allCases.map { $0.rawValue }
+    let statuses = Character.Status.allCases.map { $0.rawValue }
 }

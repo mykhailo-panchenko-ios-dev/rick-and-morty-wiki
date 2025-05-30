@@ -30,9 +30,9 @@ struct FilterReducer: ReduxReducer {
         switch action {
             case let action as AddFilterCharactersDataAction:
             state?.name = action.name
-            state?.gender = action.gender
+            state?.gender = Character.Gender(rawValue: action.gender)
             state?.species = action.species
-            state?.status = action.status
+            state?.status = Character.Status(rawValue: action.status)
          case is StartFilterCharacterRequestAction:
             state?.isLoading = true
         case is SetFilterCharacterAction:

@@ -25,10 +25,9 @@ class FilterMiddleware: ReduxMiddleware {
                 return
             }
             let filterCharacterRequest = FilterCharacterRequest(name: state.filterState.name,
-                                                                status: nil,
+                                                                status: state.filterState.status,
                                                                 species: state.filterState.species,
-                                                                type: nil,
-                                                                gender: nil)
+                                                                gender: state.filterState.gender)
             filterCharacterService.fetchFilters(filterCharacterRequest: filterCharacterRequest)
                 .sink(receiveCompletion: { _ in }, receiveValue: { value in
                     print(value)

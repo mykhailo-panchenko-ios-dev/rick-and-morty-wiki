@@ -10,7 +10,7 @@ import SwiftUI
 struct FilterView: View {
     
     @EnvironmentObject var store: AppStore
-    struct FilterData: Equatable {
+    private struct FilterData: Equatable {
         var name: String = ""
         var gender: String = ""
         var species: String = ""
@@ -34,17 +34,17 @@ struct FilterView: View {
                 FilterTextFields(title: "Name",
                                  placeholder: "Rick Sanchez",
                                  field: $filterData.name)
-                
                 FilterTextFields(title: "Gender",
                                  placeholder: "Male",
-                                 field: $filterData.gender)
-                
+                                 field: $filterData.gender,
+                                 pickerItems: store.state.filterState.genders)
                 FilterTextFields(title: "Species",
                                  placeholder: "Human",
                                  field: $filterData.species)
                 FilterTextFields(title: "Status",
                                  placeholder: "Alive",
-                                 field: $filterData.status)
+                                 field: $filterData.status,
+                                 pickerItems: store.state.filterState.statuses)
                 Spacer()
             }.onChange(of: filterData) {
                 store.dispatch(AddFilterCharactersDataAction(name: filterData.name,
