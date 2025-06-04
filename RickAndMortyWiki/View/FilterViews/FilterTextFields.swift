@@ -9,73 +9,6 @@ import SwiftUI
 
 
 struct FilterTextFields: View {
-        
-    private enum AnimationPhase: CaseIterable {
-        case initial
-        case rotate
-        case animating
-        case final
-        
-        var yOffset: CGFloat {
-            switch self {
-            case .initial:
-                100
-            case .animating, .final, .rotate:
-                0
-            }
-        }
-        
-        var xOffset: CGFloat {
-            switch self {
-            case .initial:
-                -100
-            case .animating, .final, .rotate:
-                0
-            }
-        }
-        
-        var yOffsetTextField: CGFloat {
-            switch self {
-            case .initial:
-                65
-            case .animating, .rotate, .final:
-                -35
-            }
-        }
-        
-        var xOffsetTextField: CGFloat {
-            switch self {
-            case .initial:
-                -65
-            case .animating, .rotate:
-                35
-            case .final:
-                140
-            }
-        }
-        
-        var rotationDegree: CGFloat {
-            switch self {
-            case .initial:
-                45
-            case .rotate:
-                30
-            case .animating, .final:
-                0
-            }
-        }
-        
-        var textFieldWidth: CGFloat {
-            switch self {
-            case .initial, .rotate:
-                return 44
-                case .animating:
-                return 36
-            case .final:
-                return 250
-            }
-        }
-    }
     
     @State private var animationStart: Bool = false
     @State private var pickerSelected: Bool = false
@@ -101,30 +34,26 @@ struct FilterTextFields: View {
                               trigger: animationStart) { phase in
             ZStack {
                 
-                animatedTitleViews.offset(x: phase.xOffset,
-                                         y: phase.yOffset)
-                
-                Rectangle()
-                    .fill(Color.backgroundTextField)
+                animatedTitleViews
+                    .offset(x: phase.xOffset,
+                            y: phase.yOffset)
+                textFieldBackground(phase: phase)
+                textFieldView(phase: phase)
                     .frame(width: phase.textFieldWidth,
-                           height: 44)
-                    .cornerRadius(32)
-                    .shadow(radius: 3)
+                           height: 44,
+                           alignment: .leading)
                     .offset(x: phase.xOffsetTextField,
                             y: phase.yOffsetTextField)
-                textFieldView(phase: phase)
-                    .frame(width: phase.textFieldWidth - 16,
-                        height: 44,
-                        alignment: .leading)
-                .offset(x: phase.xOffsetTextField,
-                        y: phase.yOffsetTextField)
-                .padding(.vertical, 20)
-            }.rotationEffect(.degrees(phase.rotationDegree))
-            .onTapGesture {
-                withAnimation(.easeIn(duration: 0.2)) {
-                    pickerSelected.toggle()
+                    .padding(.vertical, 20)
+                if !field.isEmpty {
+                    clearButtonView(phase: phase)
                 }
-            }
+            }.rotationEffect(.degrees(phase.rotationDegree))
+                .onTapGesture {
+                    withAnimation(.easeIn(duration: 0.2)) {
+                        pickerSelected.toggle()
+                    }
+                }
         } animation: { phase in
             switch phase {
             case .initial, .rotate:
@@ -138,6 +67,30 @@ struct FilterTextFields: View {
         }.onAppear {
             animationStart = true
         }
+    }
+    @ViewBuilder
+    private func clearButtonView(phase: AnimationPhase) -> some View {
+        Button {
+            field = ""
+        } label: {
+            Image(systemName: "xmark")
+                .foregroundStyle(Color.red.secondary)
+                .opacity(phase == .final ? 1 : 0)
+                
+        }.offset(x: phase.xOffsetTextFieldBackgound + phase.textFieldWidth/2,
+                y: phase.yOffsetTextField)
+    }
+    
+    @ViewBuilder
+    private func textFieldBackground(phase: AnimationPhase) -> some View {
+        Rectangle()
+            .fill(Color.backgroundTextField)
+            .frame(width: phase.textFieldBackgroundWidth,
+                   height: 44)
+            .cornerRadius(32)
+            .shadow(radius: 3)
+            .offset(x: phase.xOffsetTextFieldBackgound,
+                    y: phase.yOffsetTextField)
     }
     
     @ViewBuilder
@@ -187,11 +140,100 @@ struct FilterTextFields: View {
     }
 }
 
-
+extension FilterTextFields {
+    private enum AnimationPhase: CaseIterable {
+        case initial
+        case rotate
+        case animating
+        case final
+        
+        var yOffset: CGFloat {
+            switch self {
+            case .initial:
+                100
+            case .animating, .final, .rotate:
+                0
+            }
+        }
+        
+        var xOffset: CGFloat {
+            switch self {
+            case .initial:
+                -100
+            case .animating, .final, .rotate:
+                0
+            }
+        }
+        
+        var yOffsetTextField: CGFloat {
+            switch self {
+            case .initial:
+                65
+            case .animating, .rotate, .final:
+                -35
+            }
+        }
+        
+        var xOffsetTextField: CGFloat {
+            switch self {
+            case .initial:
+                -65
+            case .animating, .rotate:
+                35
+            case .final:
+                130
+            }
+        }
+        
+        var xOffsetTextFieldBackgound: CGFloat {
+            switch self {
+            case .initial:
+                -65
+            case .animating, .rotate:
+                35
+            case .final:
+                140
+            }
+        }
+        
+        var rotationDegree: CGFloat {
+            switch self {
+            case .initial:
+                45
+            case .rotate:
+                30
+            case .animating, .final:
+                0
+            }
+        }
+        
+        var textFieldWidth: CGFloat {
+            switch self {
+            case .initial, .rotate:
+                return 44
+                case .animating:
+                return 36
+            case .final:
+                return 214
+            }
+        }
+        var textFieldBackgroundWidth: CGFloat {
+            switch self {
+            case .initial, .rotate:
+                return 44
+                case .animating:
+                return 36
+            case .final:
+                return 250
+            }
+        }
+    }
+}
 
 #Preview {
     @Previewable @State var text: String = ""
     FilterTextFields(title: "Gender",
                      placeholder: "Male",
                      field: $text)
+    .offset(x: -110, y: 0)
 }
