@@ -10,12 +10,6 @@ import SwiftUI
 struct FilterView: View {
     
     @EnvironmentObject var store: AppStore
-    private struct FilterData: Equatable {
-        var name: String = ""
-        var gender: String = ""
-        var species: String = ""
-        var status: String = ""
-    }
     @State private var filterData: FilterData = FilterData()
   
     var body: some View {
@@ -25,6 +19,14 @@ struct FilterView: View {
                 contentView
             }
             submitButton.frame(alignment: .bottom)
+        }
+    }
+    
+    private var contentView: some View {
+        VStack(spacing: 40) {
+            titleAndSubtitleView
+            backgroundDetailsView
+                .frame(width: 500)
         }
     }
     
@@ -55,14 +57,6 @@ struct FilterView: View {
         }
     }
     
-    private var contentView: some View {
-        VStack(spacing: 40) {
-            titleAndSubtitleView
-            backgroundDetailsView
-                .frame(width: 500)
-        }
-    }
-    
     private var titleAndSubtitleView: some View {
         VStack(alignment: .leading) {
             Text("Filter")
@@ -84,6 +78,15 @@ struct FilterView: View {
             }
             .growingButtonStyle().shadow(color:.buttonBackground, radius: 5).padding(.bottom, 20)
         }
+    }
+}
+
+extension FilterView {
+    private struct FilterData: Equatable {
+        var name: String = ""
+        var gender: String = ""
+        var species: String = ""
+        var status: String = ""
     }
 }
 
