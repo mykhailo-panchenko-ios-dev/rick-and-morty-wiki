@@ -10,7 +10,7 @@ import Combine
 
 class Store<AppState, RootReducer>: ReduxStore
     where RootReducer: ReduxReducer,
-    RootReducer.S == AppState {
+    RootReducer.State == AppState {
     
     @Published
     private(set) public var state: AppState
@@ -19,7 +19,7 @@ class Store<AppState, RootReducer>: ReduxStore
     private var middlewares: [ReduxMiddleware]
 
     init(
-        initialState: S,
+        initialState: State,
         rootReducer: RootReducer,
         middlewares: [ReduxMiddleware]
     ) {
@@ -29,11 +29,12 @@ class Store<AppState, RootReducer>: ReduxStore
     }
 
     public func dispatch(_ action: ReduxAction) {
-        state = rootReducer.reduce(
-            state: state,
-            action: action
-        )
-        
+        DispatchQueue.main.async {
+            self.state = self.rootReducer.reduce(
+                state: self.state,
+                action: action
+            )
+        }
         middlewares.forEach {
             $0.dispatch(state: state,
                         action: action,
