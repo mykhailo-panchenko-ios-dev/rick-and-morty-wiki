@@ -58,7 +58,8 @@ struct FilterView: View {
     private var contentView: some View {
         VStack(spacing: 40) {
             titleAndSubtitleView
-            backgroundDetailsView.frame(width: 500).offset(x: -110, y: 0)
+            backgroundDetailsView
+                .frame(width: 500)
         }
     }
     
@@ -87,5 +88,13 @@ struct FilterView: View {
 }
 
 #Preview {
-    FilterView()
+    let networkLayer = NetworkLayer()
+    let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
+    let store = Store(
+        initialState: AppState(listState: ListState(),
+                               filterState: FilterState()),
+        rootReducer: RootReducer(filterReducer: FilterReducer()),
+        middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
+    
+    FilterView().environmentObject(store)
 }

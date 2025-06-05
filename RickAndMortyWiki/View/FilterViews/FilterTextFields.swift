@@ -66,7 +66,7 @@ struct FilterTextFields: View {
             }
         }.onAppear {
             animationStart = true
-        }
+        }.offset(x: -110, y: 0)
     }
     @ViewBuilder
     private func clearButtonView(phase: AnimationPhase) -> some View {
@@ -235,5 +235,4 @@ extension FilterTextFields {
     FilterTextFields(title: "Gender",
                      placeholder: "Male",
                      field: $text)
-    .offset(x: -110, y: 0)
 }

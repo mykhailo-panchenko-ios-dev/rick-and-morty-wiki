@@ -14,7 +14,7 @@ typealias AppStore = Store<AppState, RootReducer>
 @main
 struct RickAndMortyWikiApp: App {
     
-    private  var store: AppStore = {
+    private var store: AppStore = {
         let networkLayer = NetworkLayer()
         let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
         return Store(
