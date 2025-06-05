@@ -8,9 +8,9 @@
 import Foundation
 
 public protocol ReduxStore: ObservableObject {
-    associatedtype S: ReduxState
+    associatedtype State: ReduxState
     
-    var state: S { get }
+    var state: State { get }
     
     func dispatch(_ action: ReduxAction)
 }

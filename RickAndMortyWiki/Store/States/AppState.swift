@@ -9,6 +9,4 @@ struct AppState: ReduxState {
     
     var listState = ListState()
     var filterState = FilterState()
-    var isLoading: Bool = false
-    var errorMessage: String?
 }
