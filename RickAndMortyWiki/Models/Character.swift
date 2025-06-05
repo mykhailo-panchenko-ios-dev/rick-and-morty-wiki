@@ -8,13 +8,13 @@
 import Foundation
 
 struct Character: Codable {
-    enum Status: String, Codable {
+    enum Status: String, Codable, CaseIterable {
         case alive = "Alive"
         case dead = "Dead"
         case unknown
     }
     
-    enum Gender: String, Codable {
+    enum Gender: String, Codable, CaseIterable {
         case male = "Male"
         case female = "Female"
         case genderless = "Genderless"

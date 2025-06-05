@@ -6,5 +6,5 @@
 //
 
 struct ListState: ReduxState {
-    
+    var characters: [Character] = []
 }

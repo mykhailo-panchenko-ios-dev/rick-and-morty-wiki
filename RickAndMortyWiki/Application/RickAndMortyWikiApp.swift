@@ -13,7 +13,17 @@ typealias AppStore = Store<AppState, RootReducer>
 
 @main
 struct RickAndMortyWikiApp: App {
-
+    
+    private var store: AppStore = {
+        let networkLayer = NetworkLayer()
+        let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
+        return Store(
+            initialState: AppState(listState: ListState(),
+                                   filterState: FilterState()),
+            rootReducer: RootReducer(filterReducer: FilterReducer()),
+            middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
+    }()
+       
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -29,7 +39,7 @@ struct RickAndMortyWikiApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FilterView().environmentObject(store)
         }
         .modelContainer(sharedModelContainer)
     }
