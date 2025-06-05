@@ -10,7 +10,7 @@ import Combine
 
 class Store<AppState, RootReducer>: ReduxStore
     where RootReducer: ReduxReducer,
-    RootReducer.State == AppState {
+          RootReducer.State == AppState {
     
     @Published
     private(set) public var state: AppState
