@@ -8,5 +8,8 @@
 import Foundation
 
 protocol ReduxMiddleware {
-    func dispatch(state: ReduxState, action: ReduxAction, effectDispatch: @escaping (ReduxAction) -> Void)
+    
+    func dispatch(state: ReduxState,
+                  action: ReduxAction,
+                  effectDispatch: @escaping (ReduxAction) -> Void)
 }

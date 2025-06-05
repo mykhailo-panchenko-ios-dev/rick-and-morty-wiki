@@ -6,7 +6,7 @@
 //
 
 public protocol ReduxReducer {
-    associatedtype S: ReduxState
+    associatedtype State: ReduxState
 
-    func reduce(state: S?, action: ReduxAction?) -> S
+    func reduce(state: State?, action: ReduxAction?) -> State
 }

@@ -7,9 +7,18 @@
 
 
 struct RootReducer: ReduxReducer {
+    let filterReducer: FilterReducer
     
-func reduce(state: AppState?, action: ReduxAction?) -> AppState {
-       return state ?? AppState()
+    func reduce(state: AppState?,
+                action: ReduxAction?) -> AppState {
+        var state = state ?? AppState()
+        state.filterState = filterReducer.reduce(state: state.filterState,
+                                                  action: action)
+        switch action {
+        case let action as SetFilterCharacterAction:
+            state.listState.characters = action.characters
+        default : break
+        }
+       return state
     }
-    
 }
