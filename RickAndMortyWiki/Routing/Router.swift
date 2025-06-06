@@ -22,21 +22,15 @@ final class Router: ObservableObject {
         }
     }
     
-    @inlinable
-    @inline(__always)
     func push(_ appRoute: Route) {
         path.append(appRoute)
     }
     
-    @inlinable
-    @inline(__always)
     func pop() {
         guard !path.isEmpty else { return }
         path.removeLast()
     }
     
-    @inlinable
-    @inline(__always)
     func popToRoot() {
         path.removeLast(path.count)
     }
@@ -46,6 +40,5 @@ extension Router {
     enum Route {
         case filterScene
         case charactersListScene
-    //    case characterDetailScene(Int)
     }
 }
