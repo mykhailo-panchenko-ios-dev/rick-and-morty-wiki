@@ -39,7 +39,7 @@ struct RickAndMortyWikiApp: App {
 
     var body: some Scene {
         WindowGroup {
-            FilterView().environmentObject(store)
+            RootView().environmentObject(store)
         }
         .modelContainer(sharedModelContainer)
     }

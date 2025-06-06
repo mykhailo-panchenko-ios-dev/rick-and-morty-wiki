@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FilterView: View {
-    
+    @EnvironmentObject private var router: Router
     @EnvironmentObject var store: AppStore
     @State private var filterData: FilterData = FilterData()
   
@@ -75,6 +75,7 @@ struct FilterView: View {
             Spacer()
             Button(store.state.filterState.isLoading ? "Loading...": "Show list of characters") {
                 store.dispatch(StartFilterCharacterRequestAction())
+                router.push(.charactersListScene)
             }
             .growingButtonStyle().shadow(color:.buttonBackground, radius: 5).padding(.bottom, 20)
         }
@@ -99,5 +100,5 @@ extension FilterView {
         rootReducer: RootReducer(filterReducer: FilterReducer()),
         middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
     
-    FilterView().environmentObject(store)
+    FilterView().environmentObject(store).environmentObject(Router())
 }

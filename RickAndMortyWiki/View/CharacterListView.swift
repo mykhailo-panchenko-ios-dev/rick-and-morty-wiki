@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListView: View {
+struct CharacterListView: View {
     var body: some View {
         ZStack {
             Color.background.edgesIgnoringSafeArea(.all)
@@ -21,5 +21,5 @@ struct ListView: View {
 }
 
 #Preview {
-    ListView()
+    CharacterListView()
 }
