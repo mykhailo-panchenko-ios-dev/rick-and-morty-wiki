@@ -1,0 +1,84 @@
+//
+//  CharacterItemView.swift
+//  RickAndMortyWiki
+//
+//  Created by Mike Panchenko on 06.06.2025.
+//
+
+import SwiftUI
+
+struct CharacterItemView: View {
+    
+    let character: Character
+    let unknownTitle = "Unknown"
+    
+    private var statusColor: Color {
+        switch character.status {
+        case .alive:
+            return .green
+        case .dead:
+            return .red
+        case .unknown, .none:
+            return .orange
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(Color.purple.gradient.tertiary)
+                .shadow(color: statusColor, radius: 3)
+                
+                .overlay {
+                    Capsule()
+                        .stroke(.white, lineWidth: 1)
+                }.padding(10)
+            HStack {
+                portretView
+                personalInfoView
+                Spacer()
+                statusView
+            }.padding(.horizontal, 20)
+        }
+    }
+    
+    private var personalInfoView: some View {
+        VStack(alignment: .leading) {
+            Text(character.name ?? unknownTitle)
+                .font(.system(size: 17, weight: .medium))
+                .foregroundColor(.text)
+            Text(character.gender?.rawValue ?? unknownTitle)
+                .foregroundColor(.text)
+        }
+    }
+    
+    private var portretView: some View {
+        Image(systemName: "person.circle.fill")
+            .foregroundColor(.white)
+            .font(.system(size: 32))
+    }
+    
+    private var statusView: some View {
+        HStack {
+            VStack(alignment: .trailing) {
+                Text("Status: \(character.status?.rawValue ?? unknownTitle)")
+                    .foregroundColor(.text)
+            }
+            
+            Image(systemName: "circle.hexagongrid.circle")
+                .foregroundStyle(statusColor.secondary, .white)
+                .font(.system(size: 32))
+        }
+    }
+    
+}
+
+#Preview {
+    var character = Character(name: "Rick Sanchez",
+                              status: .alive,
+                              species: nil,
+                              type: nil,
+                              gender: .male)
+   
+    CharacterItemView(character: character).frame(height: 100)
+}
