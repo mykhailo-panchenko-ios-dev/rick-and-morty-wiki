@@ -8,9 +8,11 @@ import SwiftUI
 
 
 struct GrowingButton: ButtonStyle {
+    var padding: CGFloat
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .padding()
+            .padding(padding)
             .background(Color.buttonBackground)
             .foregroundStyle(Color.tint)
             .fontWeight(.bold)
@@ -21,7 +23,7 @@ struct GrowingButton: ButtonStyle {
 }
 
 extension View {
-    public func growingButtonStyle() -> some View {
-        self.buttonStyle(GrowingButton())
+    public func growingButtonStyle(padding: CGFloat = 16) -> some View {
+        self.buttonStyle(GrowingButton(padding: padding))
     }
 }
