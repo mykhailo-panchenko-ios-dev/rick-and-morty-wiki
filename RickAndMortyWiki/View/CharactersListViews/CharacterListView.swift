@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct CharacterListView: View {
+    @EnvironmentObject private var router: Router
+    @EnvironmentObject var store: AppStore
+    
     var body: some View {
         ZStack {
             Color.background.edgesIgnoringSafeArea(.all)
@@ -16,10 +19,72 @@ struct CharacterListView: View {
     }
     
     private var contentView: some View {
-        Text("Hello, World!")
+        VStack {
+            ZStack {
+                titleView
+                backButton
+            }
+            listView
+        }
+    }
+    
+    private var backButton: some View {
+        HStack(alignment: .center) {
+            Button {
+                router.pop()
+            } label: {
+                Image(systemName: "chevron.backward.circle.fill")
+                    .resizable(resizingMode: .tile)
+                    .foregroundColor(.detail)
+                    .frame(width: 22, height: 22)
+            }.growingButtonStyle(padding: 6)
+                .padding(.leading)
+                
+            Spacer()
+        }
+    }
+    
+    private var titleView: some View {
+        Text("Filter results:")
+            .font(.title)
+            .fontWeight(.bold)
+            .foregroundColor(.text)
+            .padding(12)
+        
+    }
+    
+    private var listView: some View {
+        ZStack {
+            
+            
+            List(store.state.listState.characters, id: \.id) { item in
+                CharacterItemView(character: item)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+            }
+            .listStyle(.plain)
+            .background(Color.background)
+        }.mask {
+            LinearGradient(stops: [
+                Gradient.Stop(color: .clear, location: 0),
+                Gradient.Stop(color: .background, location: 0.05),
+                Gradient.Stop(color: .background, location: 0.95),
+                Gradient.Stop(color: .clear, location: 1)
+            ], startPoint: .top, endPoint: .bottom)
+        }
+        
+       
     }
 }
 
 #Preview {
-    CharacterListView()
+    let networkLayer = NetworkLayer()
+    let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
+    let store = Store(
+        initialState: AppState(listState: ListState(),
+                               filterState: FilterState()),
+        rootReducer: RootReducer(filterReducer: FilterReducer()),
+        middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
+    
+    CharacterListView().environmentObject(store).environmentObject(Router())
 }

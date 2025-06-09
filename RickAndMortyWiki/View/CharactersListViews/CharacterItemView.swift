@@ -26,13 +26,13 @@ struct CharacterItemView: View {
     var body: some View {
         ZStack {
             Capsule()
-                .fill(Color.purple.gradient.tertiary)
+                .fill(Color.backgroundTextField.gradient)
                 .shadow(color: statusColor, radius: 3)
-                
                 .overlay {
                     Capsule()
                         .stroke(.white, lineWidth: 1)
                 }.padding(10)
+            
             HStack {
                 portretView
                 personalInfoView
@@ -49,7 +49,7 @@ struct CharacterItemView: View {
                 .foregroundColor(.text)
             Text(character.gender?.rawValue ?? unknownTitle)
                 .foregroundColor(.text)
-        }
+        }.padding(.vertical, 10)
     }
     
     private var portretView: some View {
@@ -74,11 +74,12 @@ struct CharacterItemView: View {
 }
 
 #Preview {
-    var character = Character(name: "Rick Sanchez",
+    let character = Character(name: "Rick Sanchez",
                               status: .alive,
                               species: nil,
                               type: nil,
-                              gender: .male)
+                              gender: .male,
+                              id: 1)
    
-    CharacterItemView(character: character).frame(height: 100)
+    CharacterItemView(character: character)
 }

@@ -26,6 +26,5 @@ struct Character: Codable {
     var species: String?
     var type: String?
     var gender: Gender?
+    var id: Int
 }
-
-
