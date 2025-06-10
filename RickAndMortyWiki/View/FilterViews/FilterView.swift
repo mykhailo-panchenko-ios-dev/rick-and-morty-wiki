@@ -73,7 +73,7 @@ struct FilterView: View {
     private var submitButton: some View {
         VStack{
             Spacer()
-            Button(store.state.filterState.isLoading ? "Loading...": "Show list of characters") {
+            Button(store.state.isLoading ? "Loading...": "Show list of characters") {
                 store.dispatch(StartFilterCharacterRequestAction())
                 router.push(.charactersListScene)
             }
@@ -95,9 +95,9 @@ extension FilterView {
     let networkLayer = NetworkLayer()
     let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
     let store = Store(
-        initialState: AppState(listState: ListState(),
+        initialState: AppState(charactersListState: CharactersListState(),
                                filterState: FilterState()),
-        rootReducer: RootReducer(filterReducer: FilterReducer()),
+        rootReducer: RootReducer(filterReducer: FilterReducer(), charactersListReducer: CharactersListReducer()),
         middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
     
     FilterView().environmentObject(store).environmentObject(Router())

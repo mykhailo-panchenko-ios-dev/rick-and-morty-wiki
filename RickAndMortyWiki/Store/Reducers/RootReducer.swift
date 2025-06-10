@@ -5,18 +5,35 @@
 //  Created by Mike Panchenko on 08.05.2025.
 //
 
+struct StartFilterCharacterRequestAction: ReduxAction {
+   
+}
+
+struct FetchFilterCharacterPageRequestAction: ReduxAction {
+    
+}
+
+struct SetFilterCharacterAction: ReduxAction {
+    let characters: [Character]
+    let maxPage: Int
+}
 
 struct RootReducer: ReduxReducer {
     let filterReducer: FilterReducer
+    let charactersListReducer: CharactersListReducer
     
     func reduce(state: AppState?,
                 action: ReduxAction?) -> AppState {
         var state = state ?? AppState()
         state.filterState = filterReducer.reduce(state: state.filterState,
                                                   action: action)
+        state.charactersListState = charactersListReducer.reduce(state: state.charactersListState,
+                                                                 action: action)
         switch action {
-        case let action as SetFilterCharacterAction:
-            state.listState.characters = action.characters
+        case is SetFilterCharacterAction:
+            state.isLoading = false
+        case is StartFilterCharacterRequestAction, is FetchFilterCharacterPageRequestAction:
+            state.isLoading = true
         default : break
         }
        return state

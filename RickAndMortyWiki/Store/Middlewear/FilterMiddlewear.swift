@@ -20,18 +20,21 @@ class FilterMiddleware: ReduxMiddleware {
                   action: ReduxAction,
                   effectDispatch: @escaping (ReduxAction) -> Void) {
         switch action {
-         case is StartFilterCharacterRequestAction:
+         case is StartFilterCharacterRequestAction, is FetchFilterCharacterPageRequestAction:
             guard let state = state as? AppState else {
                 return
             }
             let filterCharacterRequest = FilterCharacterRequest(name: state.filterState.name,
                                                                 status: state.filterState.status,
                                                                 species: state.filterState.species,
-                                                                gender: state.filterState.gender)
+                                                                gender: state.filterState.gender,
+                                                                page: state.charactersListState.currentPage)
             filterCharacterService.fetchFilters(filterCharacterRequest: filterCharacterRequest)
-                .sink(receiveCompletion: { _ in }, receiveValue: { value in
-                    print(value)
-                    effectDispatch(SetFilterCharacterAction(characters: value))
+                .sink(receiveCompletion: { result in
+                    
+                }, receiveValue: { value in
+                    print(value.info)
+                    effectDispatch(SetFilterCharacterAction(characters: value.results, maxPage: value.info.pages))
                 })
                 .store(in: &cancellables)
         default :

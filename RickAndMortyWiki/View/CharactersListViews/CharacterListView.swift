@@ -54,17 +54,20 @@ struct CharacterListView: View {
     }
     
     private var listView: some View {
-        ZStack {
-            
-            
-            List(store.state.listState.characters, id: \.id) { item in
-                CharacterItemView(character: item)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-            }
-            .listStyle(.plain)
-            .background(Color.background)
-        }.mask {
+        List(store.state.charactersListState.characters, id: \.id) { item in
+            CharacterItemView(character: item)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .onAppear {
+                    if store.state.charactersListState.characters.last?.id == item.id
+                        && !store.state.charactersListState.maxPageReached {
+                        store.dispatch(FetchFilterCharacterPageRequestAction())
+                    }
+                }
+        }
+        .listStyle(.plain)
+        .background(Color.background)
+        .mask {
             LinearGradient(stops: [
                 Gradient.Stop(color: .clear, location: 0),
                 Gradient.Stop(color: .background, location: 0.05),
@@ -72,8 +75,6 @@ struct CharacterListView: View {
                 Gradient.Stop(color: .clear, location: 1)
             ], startPoint: .top, endPoint: .bottom)
         }
-        
-       
     }
 }
 
@@ -81,9 +82,10 @@ struct CharacterListView: View {
     let networkLayer = NetworkLayer()
     let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
     let store = Store(
-        initialState: AppState(listState: ListState(),
+        initialState: AppState(charactersListState: CharactersListState(),
                                filterState: FilterState()),
-        rootReducer: RootReducer(filterReducer: FilterReducer()),
+        rootReducer: RootReducer(filterReducer: FilterReducer(),
+                                 charactersListReducer: CharactersListReducer()),
         middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
     
     CharacterListView().environmentObject(store).environmentObject(Router())

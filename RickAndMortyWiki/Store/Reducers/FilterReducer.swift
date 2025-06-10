@@ -14,14 +14,6 @@ struct AddFilterCharactersDataAction: ReduxAction {
     let status: String
 }
 
-struct StartFilterCharacterRequestAction: ReduxAction {
-   
-}
-
-struct SetFilterCharacterAction: ReduxAction {
-    let characters: [Character]
-}
-
 struct FilterReducer: ReduxReducer {
     
     func reduce(state: FilterState?,
@@ -33,10 +25,6 @@ struct FilterReducer: ReduxReducer {
             state?.gender = Character.Gender(rawValue: action.gender)
             state?.species = action.species
             state?.status = Character.Status(rawValue: action.status)
-         case is StartFilterCharacterRequestAction:
-            state?.isLoading = true
-        case is SetFilterCharacterAction:
-            state?.isLoading = false
         default :
             break
         }
