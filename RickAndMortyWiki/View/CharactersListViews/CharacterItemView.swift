@@ -53,9 +53,20 @@ struct CharacterItemView: View {
     }
     
     private var portretView: some View {
-        Image(systemName: "person.circle.fill")
-            .foregroundColor(.white)
-            .font(.system(size: 32))
+        AsyncImage(url: URL(string: character.image ?? "")) { image in
+            image.resizable()
+        } placeholder: {
+            Image(systemName: "person.circle.fill")
+                .foregroundColor(.white)
+                .font(.system(size: 32))
+        }
+        .clipShape(.circle)
+            .frame(width: 32, height: 32)
+            .overlay {
+                Circle()
+                    .stroke(.white, lineWidth: 1)
+                    .shadow(color: .black, radius: 3)
+            }
     }
     
     private var statusView: some View {

@@ -27,4 +27,5 @@ struct Character: Codable {
     var type: String?
     var gender: Gender?
     var id: Int
+    var image: String?
 }
