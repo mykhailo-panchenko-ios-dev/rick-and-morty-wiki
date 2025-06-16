@@ -14,6 +14,6 @@ struct RootView: View {
     var body: some View {
         RouterView {
             FilterView()
-        }.environmentObject(store)
+        }
     }
 }

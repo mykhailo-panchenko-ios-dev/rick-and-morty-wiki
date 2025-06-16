@@ -61,7 +61,7 @@ struct CharacterListView: View {
                 .onAppear {
                     if store.state.charactersListState.characters.last?.id == item.id
                         && !store.state.charactersListState.maxPageReached {
-                        store.dispatch(FetchFilterCharacterPageRequestAction())
+                        store.dispatch(FetchMoreFilterCharacterRequestAction())
                     }
                 }
         }

@@ -20,7 +20,23 @@ class FilterMiddleware: ReduxMiddleware {
                   action: ReduxAction,
                   effectDispatch: @escaping (ReduxAction) -> Void) {
         switch action {
-         case is StartFilterCharacterRequestAction, is FetchFilterCharacterPageRequestAction:
+        case is StartFilterCharacterRequestAction:
+            guard let state = state as? AppState else {
+                return
+            }
+            let filterCharacterRequest = FilterCharacterRequest(name: state.filterState.name,
+                                                                status: state.filterState.status,
+                                                                species: state.filterState.species,
+                                                                gender: state.filterState.gender)
+            filterCharacterService.fetchFilters(filterCharacterRequest: filterCharacterRequest)
+                .sink(receiveCompletion: { result in
+                    
+                }, receiveValue: { value in
+                    effectDispatch(SetFilterCharacterAction(characters: value.results,
+                                                            maxPage: value.info.pages))
+                })
+                .store(in: &cancellables)
+        case is FetchMoreFilterCharacterRequestAction:
             guard let state = state as? AppState else {
                 return
             }
@@ -33,8 +49,8 @@ class FilterMiddleware: ReduxMiddleware {
                 .sink(receiveCompletion: { result in
                     
                 }, receiveValue: { value in
-                    print(value.info)
-                    effectDispatch(SetFilterCharacterAction(characters: value.results, maxPage: value.info.pages))
+                    effectDispatch(AppendFilterCharacterAction(characters: value.results,
+                                                               maxPage: value.info.pages))
                 })
                 .store(in: &cancellables)
         default :

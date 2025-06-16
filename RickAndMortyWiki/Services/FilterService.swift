@@ -29,7 +29,7 @@ struct FilterCharacterRequest {
          status: Character.Status? = nil,
          species: String? = nil,
          gender: Character.Gender? = nil,
-         page: Int) {
+         page: Int = 1) {
         self.name = name
         self.status = status
         self.species = species

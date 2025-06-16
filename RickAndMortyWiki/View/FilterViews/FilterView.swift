@@ -11,7 +11,7 @@ struct FilterView: View {
     @EnvironmentObject private var router: Router
     @EnvironmentObject var store: AppStore
     @State private var filterData: FilterData = FilterData()
-  
+    
     var body: some View {
         ZStack {
             Color.background.edgesIgnoringSafeArea(.all)
@@ -73,10 +73,13 @@ struct FilterView: View {
     private var submitButton: some View {
         VStack{
             Spacer()
-            Button(store.state.isLoading ? "Loading...": "Show list of characters") {
+            Button(store.state.filterState.startFilterRequestIsLoading ? "Loading...": "Show list of characters") {
                 store.dispatch(StartFilterCharacterRequestAction())
-                router.push(.charactersListScene)
-            }
+            }.onChange(of: store.state.filterState.startFilterRequestIsLoading, { oldValue, newValue in
+                if oldValue == true && newValue == false {
+                    router.push(.charactersListScene)
+                }
+            })
             .growingButtonStyle().shadow(color:.buttonBackground, radius: 5).padding(.bottom, 20)
         }
     }
