@@ -11,7 +11,7 @@ struct FilterView: View {
     @EnvironmentObject private var router: Router
     @EnvironmentObject var store: AppStore
     @State private var filterData: FilterData = FilterData()
-  
+    
     var body: some View {
         ZStack {
             Color.background.edgesIgnoringSafeArea(.all)
@@ -73,11 +73,33 @@ struct FilterView: View {
     private var submitButton: some View {
         VStack{
             Spacer()
-            Button(store.state.filterState.isLoading ? "Loading...": "Show list of characters") {
+            Button(store.state.filterState.startFilterRequestIsLoading ? "Loading...": "Show list of characters") {
                 store.dispatch(StartFilterCharacterRequestAction())
-                router.push(.charactersListScene)
+            }.onChange(of: store.state.filterState.startFilterRequestIsLoading, { oldValue, newValue in
+                if oldValue == true && newValue == false && store.state.filterState.networkError == nil {
+                    router.push(.charactersListScene)
+                }
+            })
+            .growingButtonStyle().shadow(color:.buttonBackground, radius: 5)
+            .padding(.bottom, 20)
+            if store.state.filterState.networkError != nil {
+                Text(store.state.filterState.networkError ?? "")
+                .foregroundColor(.red)
+                .overlay {
+                    Capsule()
+                        .stroke(.red, lineWidth: 1)
+                        .shadow(color: .black, radius: 2)
+                        .padding(-8)
+                }
+                .background {
+                    Capsule(style: .continuous)
+                        .fill(Color.white)
+                        .padding(-8)
+                }
+                .opacity(store.state.filterState.networkError != nil ? 1 : 0)
+                .padding(.bottom, 20)
             }
-            .growingButtonStyle().shadow(color:.buttonBackground, radius: 5).padding(.bottom, 20)
+            
         }
     }
 }
@@ -95,9 +117,9 @@ extension FilterView {
     let networkLayer = NetworkLayer()
     let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
     let store = Store(
-        initialState: AppState(listState: ListState(),
+        initialState: AppState(charactersListState: CharactersListState(),
                                filterState: FilterState()),
-        rootReducer: RootReducer(filterReducer: FilterReducer()),
+        rootReducer: RootReducer(filterReducer: FilterReducer(), charactersListReducer: CharactersListReducer()),
         middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
     
     FilterView().environmentObject(store).environmentObject(Router())

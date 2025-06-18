@@ -14,8 +14,6 @@ protocol NetworkLayerProtocol {
         responseType: D.Type) -> AnyPublisher<D, NetworkError>
 }
 
-
-
 enum RickAndMortyApiURL {
     case filterCharacters
     
@@ -26,6 +24,10 @@ enum RickAndMortyApiURL {
             return "\(api)/character"
         }
     }
+}
+
+struct ErrorMessages: Decodable {
+    let error: String
 }
 
 class NetworkLayer: NetworkLayerProtocol {
@@ -47,9 +49,14 @@ class NetworkLayer: NetworkLayerProtocol {
                         do {
                             let decodedData = try JSONDecoder().decode(responseType, from: data)
                             promise(.success(decodedData))
-                        } catch let error {
-                            NetworkLogger.logError(error)
-                            promise(.failure(.decodeError))
+                        } catch {
+                            do {
+                                let decodedData = try JSONDecoder().decode(ErrorMessages.self, from: data)
+                                promise(.failure(.apiError(decodedData.error)))
+                            } catch {
+                                NetworkLogger.logError(.decodeError)
+                                promise(.failure(.decodeError))
+                            }
                         }
                         
                     } else {

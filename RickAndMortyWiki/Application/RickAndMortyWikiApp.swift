@@ -18,9 +18,10 @@ struct RickAndMortyWikiApp: App {
         let networkLayer = NetworkLayer()
         let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
         return Store(
-            initialState: AppState(listState: ListState(),
+            initialState: AppState(charactersListState: CharactersListState(),
                                    filterState: FilterState()),
-            rootReducer: RootReducer(filterReducer: FilterReducer()),
+            rootReducer: RootReducer(filterReducer: FilterReducer(),
+                                     charactersListReducer: CharactersListReducer()),
             middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
     }()
        

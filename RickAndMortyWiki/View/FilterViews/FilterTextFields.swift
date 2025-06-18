@@ -83,11 +83,10 @@ struct FilterTextFields: View {
     
     @ViewBuilder
     private func textFieldBackground(phase: AnimationPhase) -> some View {
-        Rectangle()
+        Capsule()
             .fill(Color.backgroundTextField)
             .frame(width: phase.textFieldBackgroundWidth,
                    height: 44)
-            .cornerRadius(32)
             .shadow(radius: 3)
             .offset(x: phase.xOffsetTextFieldBackgound,
                     y: phase.yOffsetTextField)
@@ -121,9 +120,8 @@ struct FilterTextFields: View {
     
     private var animatedTitleViews: some View {
         ZStack {
-            Rectangle()
+            Capsule()
                 .fill(Color.detail.gradient)
-                .cornerRadius(20)
                 .padding()
                 .frame(width: 200, height: 100)
                 .rotationEffect(.degrees(-45))

@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct RouterView<Content: View>: View {
-    
-    @EnvironmentObject var store: AppStore
-    
+
     @StateObject private var router = Router()
+    
     private let content: Content
     
     init(@ViewBuilder content: @escaping () -> Content) {
@@ -21,11 +20,9 @@ struct RouterView<Content: View>: View {
     var body: some View {
         NavigationStack(path: $router.path) {
             content.navigationDestination(for: Router.Route.self) {
-                    router.view(for: $0, store: store).navigationBarBackButtonHidden()
+                    router.view(for: $0).navigationBarBackButtonHidden()
                 }
         }
         .environmentObject(router)
     }
-
-   
 }
