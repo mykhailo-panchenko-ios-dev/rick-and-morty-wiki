@@ -30,7 +30,12 @@ class FilterMiddleware: ReduxMiddleware {
                                                                 gender: state.filterState.gender)
             filterCharacterService.fetchFilters(filterCharacterRequest: filterCharacterRequest)
                 .sink(receiveCompletion: { result in
-                    
+                    switch result {
+                    case .finished:
+                        break
+                    case .failure(let failure):
+                        effectDispatch(ErrorFilterCharacterAction(error: failure))
+                    }
                 }, receiveValue: { value in
                     effectDispatch(SetFilterCharacterAction(characters: value.results,
                                                             maxPage: value.info.pages))

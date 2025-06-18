@@ -13,6 +13,7 @@ enum NetworkError: Error {
     case invalidURL
     case decodeError
     case unknown
+    case apiError(String)
 }
 
 class NetworkLogger {

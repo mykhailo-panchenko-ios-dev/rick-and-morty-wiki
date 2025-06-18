@@ -15,4 +15,5 @@ struct FilterState: ReduxState {
     let genders = Character.Gender.allCases.map { $0.rawValue }
     let statuses = Character.Status.allCases.map { $0.rawValue }
     var startFilterRequestIsLoading: Bool = false
+    var networkError: String?
 }

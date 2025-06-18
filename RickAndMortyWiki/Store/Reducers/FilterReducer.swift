@@ -16,6 +16,10 @@ struct SetFilterCharacterAction: ReduxAction {
     let maxPage: Int
 }
 
+struct ErrorFilterCharacterAction: ReduxAction {
+    let error: NetworkError
+}
+
 struct AppendFilterCharacterAction: ReduxAction {
     let characters: [Character]
     let maxPage: Int
@@ -40,8 +44,17 @@ struct FilterReducer: ReduxReducer {
             state?.species = action.species
             state?.status = Character.Status(rawValue: action.status)
         case is StartFilterCharacterRequestAction:
+            state?.networkError = nil
             state?.startFilterRequestIsLoading = true
         case is SetFilterCharacterAction:
+            state?.startFilterRequestIsLoading = false
+        case let action as ErrorFilterCharacterAction:
+            switch action.error {
+            case .urlError, .invalidResponse, .invalidURL, .decodeError, .unknown:
+                state?.networkError = "Unknown error"
+            case .apiError(let error):
+                state?.networkError = error
+            }
             state?.startFilterRequestIsLoading = false
         default :
             break
