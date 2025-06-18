@@ -13,10 +13,10 @@ final class Router: ObservableObject {
     @Published var path = NavigationPath()
     
     @ViewBuilder
-    func view(for route: Route, store: AppStore) -> some View {
+    func view(for route: Route) -> some View {
         switch route {
         case .filterScene:
-            FilterView().environmentObject(store)
+            FilterView()
         case .charactersListScene:
             CharacterListView()
         }

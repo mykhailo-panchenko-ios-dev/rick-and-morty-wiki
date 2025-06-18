@@ -7,6 +7,7 @@
 
 struct AppState: ReduxState {
     
-    var listState = ListState()
+    var charactersListState = CharactersListState()
     var filterState = FilterState()
+    var isLoading = false
 }
