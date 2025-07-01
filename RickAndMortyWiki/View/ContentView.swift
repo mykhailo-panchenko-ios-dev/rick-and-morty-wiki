@@ -7,11 +7,13 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-
+    let service = IFilterCharacterService(networkLayer:  NetworkLayer())
+    
     var body: some View {
         NavigationSplitView {
             List {

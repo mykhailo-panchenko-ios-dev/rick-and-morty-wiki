@@ -7,9 +7,24 @@
 
 import SwiftUI
 import SwiftData
+import Combine
+
+typealias AppStore = Store<AppState, RootReducer>
 
 @main
 struct RickAndMortyWikiApp: App {
+    
+    private var store: AppStore = {
+        let networkLayer = NetworkLayer()
+        let serviceBuilder = ServiceFactory(networkLayer: networkLayer)
+        return Store(
+            initialState: AppState(charactersListState: CharactersListState(),
+                                   filterState: FilterState()),
+            rootReducer: RootReducer(filterReducer: FilterReducer(),
+                                     charactersListReducer: CharactersListReducer()),
+            middlewares: [FilterMiddleware(filterCharacterService: serviceBuilder.makeFilterService())])
+    }()
+       
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -25,7 +40,7 @@ struct RickAndMortyWikiApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView().environmentObject(store)
         }
         .modelContainer(sharedModelContainer)
     }
